@@ -244,15 +244,12 @@ restoreOverwrittenFilesWithOriginals().then(() => {
       }
     }
 
-    if (cookie === undefined) {
+    if (cookie === undefined || cookie !== process.env.JUICESHOP_PASSWORD) {
       console.log('cookie does not exist');
 
       res.status(401).send('Authentication required.')
     } else {
-      // yes, cookie was already present
-      if (cookie === process.env.JUICESHOP_PASSWORD) {
-        next();
-      }
+      next();
     }
   })
 
