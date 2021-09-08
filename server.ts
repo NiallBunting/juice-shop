@@ -232,16 +232,15 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.use(cookieParser('kekse'))
   // vuln-code-snippet end directoryListingChallenge accessLogDisclosureChallenge
 
-  /* Add cookie check */
-  app.use(function (req, res, next) {
+  app.use((req, res, next) => {
     // check if client sent cookie
     var cookie = undefined;
 
     console.log(req.cookies)
 
     if (req.cookies.hasOwnProperty !== undefined) {
-      if (req.cookies.hasOwnProperty(process.env.COOKIENAME)) {
-        cookie = req.cookies[process.env.COOKIENAME];
+      if (req.cookies.hasOwnProperty(process.env.JUICESHOP_COOKIENAME)) {
+        cookie = req.cookies[process.env.JUICESHOP_COOKIENAME];
       }
     }
 
@@ -251,7 +250,7 @@ restoreOverwrittenFilesWithOriginals().then(() => {
       res.status(401).send('Authentication required.')
     } else {
       // yes, cookie was already present
-      if (cookie === process.env.PASSWORD) {
+      if (cookie === process.env.JUICESHOP_PASSWORD) {
         next();
       }
     }
