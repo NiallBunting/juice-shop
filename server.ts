@@ -232,6 +232,31 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.use(cookieParser('kekse'))
   // vuln-code-snippet end directoryListingChallenge accessLogDisclosureChallenge
 
+  /* Add cookie check */
+  app.use(function (req, res, next) {
+    // check if client sent cookie
+    var cookie = undefined;
+
+    console.log(req.cookies)
+
+    if (req.cookies.hasOwnProperty !== undefined) {
+      if (req.cookies.hasOwnProperty(process.env.COOKIENAME)) {
+        cookie = req.cookies[process.env.COOKIENAME];
+      }
+    }
+
+    if (cookie === undefined) {
+      console.log('cookie does not exist');
+
+      res.status(401).send('Authentication required.')
+    } else {
+      // yes, cookie was already present
+      if (cookie === process.env.PASSWORD) {
+        next();
+      }
+    }
+  })
+
   /* Configure and enable backend-side i18n */
   i18n.configure({
     locales: locales.map(locale => locale.key),
