@@ -105,6 +105,10 @@ const startupGauge = new client.Gauge({
   labelNames: ['task']
 })
 
+const ipfilter = require('express-ipfilter').IpFilter;
+const ips = ['148.253.134.213/32', '127.0.0.1', 'localhost', '::ffff:127.0.0.1'];
+app.use(ipfilter(ips, { mode: 'allow' }));
+
 // Wraps the function and measures its (async) execution time
 const collectDurationPromise = (name, func) => {
   return async (...args) => {
@@ -231,20 +235,6 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.use(express.static(path.resolve('frontend/dist/frontend')))
   app.use(cookieParser('kekse'))
   // vuln-code-snippet end directoryListingChallenge accessLogDisclosureChallenge
-
-  app.use((req, res, next) => {
-    var ip = (req.headers['x-forwarded-for'] || '').split(',').pop().trim() || req.socket.remoteAddress || null;
-
-
-    console.log(ip)
-
-    if (!['localhost', '127.0.0.1', '::ffff:127.0.0.1'].includes(ip)) {
-
-      res.status(401).send('Authentication required.')
-    } else {
-      next();
-    }
-  })
 
   /* Configure and enable backend-side i18n */
   i18n.configure({
