@@ -107,7 +107,7 @@ const startupGauge = new client.Gauge({
 })
 
 const ipfilter = require('express-ipfilter').IpFilter;
-const ips = ['148.253.134.213/32', '127.0.0.1', 'localhost', '::ffff:127.0.0.1'];
+const ips = ['148.253.134.213/32', '148.253.134.212/32', '127.0.0.1', 'localhost', '::ffff127.0.0.1'];
 app.use(ipfilter(ips, { mode: 'allow' }));
 
 // Wraps the function and measures its (async) execution time
