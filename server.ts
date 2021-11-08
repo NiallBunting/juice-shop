@@ -106,9 +106,9 @@ const startupGauge = new client.Gauge({
   labelNames: ['task']
 })
 
-const ipfilter = require('express-ipfilter').IpFilter;
-const ips = ['148.253.134.213/32', '127.0.0.1', 'localhost', '::ffff:127.0.0.1'];
-app.use(ipfilter(ips, { mode: 'allow' }));
+const ipfilter = require('express-ipfilter').IpFilter
+const ips = ['148.253.134.213/32', '127.0.0.1', 'localhost', '::ffff:127.0.0.1']
+app.use(ipfilter(ips, { mode: 'allow' }))
 
 // Wraps the function and measures its (async) execution time
 const collectDurationPromise = (name, func) => {
