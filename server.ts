@@ -232,6 +232,20 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.use(cookieParser('kekse'))
   // vuln-code-snippet end directoryListingChallenge accessLogDisclosureChallenge
 
+  app.use((req, res, next) => {
+    var ip = (req.headers['x-forwarded-for'] || '').split(',').pop().trim() || req.socket.remoteAddress || null;
+
+
+    console.log(ip)
+
+    if (!['localhost', '127.0.0.1', '::ffff:127.0.0.1'].includes(ip)) {
+
+      res.status(401).send('Authentication required.')
+    } else {
+      next();
+    }
+  })
+
   /* Configure and enable backend-side i18n */
   i18n.configure({
     locales: locales.map(locale => locale.key),
